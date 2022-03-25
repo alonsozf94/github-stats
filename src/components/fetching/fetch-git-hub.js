@@ -1,4 +1,4 @@
-import { useReducer, useState } from "react";
+import { useState } from "react";
 
 const initialState = {
   nickName: null,
@@ -14,7 +14,7 @@ const initialState = {
   Repos: null,
 };
 
-function reducer(state, data) {
+function reducer(data) {
   console.log(data);
   if (data) {
     let arrayFollowers = [];
@@ -112,23 +112,31 @@ function reducer(state, data) {
       Repos: repos,
     };
   } else {
-    return state;
+    return "nada.......";
   }
 }
 
 function Browsing(name) {
-  const [stateData, dataDispatch] = useReducer(reducer, initialState);
+  const [data, setData] = useState(initialState);
+  // let data1 = {};
 
-  fetch(`https://api.github.com/users/${name}`, {
-    headers: {
-      Authorization:
-        "Basic UnViZW5TYW5kcm86Z2hwXzlJUmhaWjJWTjd6WmdMRkRqVk5jcjUxc3BUcG81MjN6Ym1XcQ==",
-    },
-  })
+  fetch(`https://api.github.com/users/${name}`)
     .then((response) => response.json())
-    .then(dataDispatch);
+    .then((data) => {
+      console.log(data.login);
+      setData({
+        nickName: data.login,
+        name: data.name,
+        urlAvatar: data.avatar_url,
+        cantFollowers: data.followers,
+        cantFollowing: data.following,
+        cantGists: data.public_gists,
+        cantRepos: data.public_repos,
+      });
+    })
+    .catch((error) => console.log(error));
 
-  return stateData;
+  return data;
 }
 
 export default Browsing;
