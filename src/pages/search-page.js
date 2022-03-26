@@ -1,15 +1,10 @@
 import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
-import { NavLink } from "react-router-dom";
-import ReactDOM from "react-dom";
 import { RiStarFill } from "react-icons/ri";
 import { MdGroups } from "react-icons/md";
 import { BsFileCodeFill } from "react-icons/bs";
 import { FaBook } from "react-icons/fa";
 import { RiUserFollowLine } from "react-icons/ri";
-import { BsFillPersonFill } from "react-icons/bs";
-import { RiSearchFill } from "react-icons/ri";
-import { GiRoundStar } from "react-icons/gi";
 import { createFavorite, destroyFavorite } from "../services/favorite-service";
 import * as C from "./componentStyled/componentStyled";
 
@@ -298,27 +293,6 @@ export function SearchPage() {
             <C.Text>Public Gists</C.Text>
           </C.Card>
         </div>
-
-        <Footer>
-          <NavLink
-            to={"/profile"}
-            style={{ cursor: "pointer", color: "#828282", width: "45px" }}
-          >
-            <BsFillPersonFill />
-          </NavLink>
-          <NavLink
-            to={"/"}
-            style={{ cursor: "pointer", color: "#828282", width: "45px" }}
-          >
-            <RiSearchFill />
-          </NavLink>
-          <NavLink
-            to={"/favorites"}
-            style={{ cursor: "pointer", color: "#828282", width: "45px" }}
-          >
-            <GiRoundStar />
-          </NavLink>
-        </Footer>
       </div>
     </C.Container>
   );

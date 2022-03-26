@@ -7,7 +7,7 @@ import { CustomLink } from "../components/custom-link";
 import Text from "../components/text";
 
 const Section = styled.div`
-  margin: 96px auto;
+  margin: 96px auto 0 auto;
 `;
 
 const Container = styled.div`

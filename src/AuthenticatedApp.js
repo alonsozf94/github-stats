@@ -6,20 +6,24 @@ import ReposPage from "./pages/repos-page";
 import GistsPage from "./pages/gists-page";
 import FavoritesPage from "./pages/favorites-page";
 import ProfilePage from "./pages/profile";
+import Footer from "./pages/footer";
 
 function AuthenticatedApp() {
   return (
-    <Routes>
-      <Route index element={<Navigate to="/home" />} />
-      <Route path="/home" element={<SearchPage />} />
-      <Route path="/profile" element={<ProfilePage />} />
-      <Route path="/followers" element={<FollowersPage />} />
-      <Route path="/following" element={<FollowingPage />} />
-      <Route path="/repos" element={<ReposPage />} />
-      <Route path="/gists" element={<GistsPage />} />
-      <Route path="/favorites" element={<FavoritesPage />} />
-      <Route path="*" element={<Navigate to="/home" />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route index element={<Navigate to="/home" />} />
+        <Route path="/home" element={<SearchPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/followers" element={<FollowersPage />} />
+        <Route path="/following" element={<FollowingPage />} />
+        <Route path="/repos" element={<ReposPage />} />
+        <Route path="/gists" element={<GistsPage />} />
+        <Route path="/favorites" element={<FavoritesPage />} />
+        <Route path="*" element={<Navigate to="/home" />} />
+      </Routes>
+      <Footer />
+    </>
   );
 }
 
