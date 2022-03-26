@@ -10,6 +10,7 @@ import { RiUserFollowLine } from "react-icons/ri";
 import { BsFillPersonFill } from "react-icons/bs";
 import { RiSearchFill } from "react-icons/ri";
 import { GiRoundStar } from "react-icons/gi";
+import {BsGithub} from 'react-icons/bs'
 import { createFavorite, destroyFavorite } from "../services/favorite-service";
 import * as C from "./componentStyled/componentStyled";
 
@@ -39,6 +40,8 @@ export function SearchPage() {
   const [state, setData] = useState(
     JSON.parse(localStorage.getItem("data")) || initialState
   );
+  const [states, setStates] = useState({status: "idle", data:null, error:null})
+  const status = states.status
 
   useEffect(() => {
     if (state.nickName !== null)
@@ -47,14 +50,19 @@ export function SearchPage() {
 
   function handleSubmit(event) {
     event.preventDefault();
+    setStates({status:"loading", data:null, error: null})
     fetch(`https://api.github.com/users/${query}`, {
       headers: {
         Authorization:
           "Basic UnViZW5TYW5kcm86Z2hwXzlJUmhaWjJWTjd6WmdMRkRqVk5jcjUxc3BUcG81MjN6Ym1XcQ==",
       },
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if(!response.ok) throw new Error(response.status)
+        return response.json()
+      })
       .then((data) => {
+                
         setData({
           nickName: data.login,
           name: data.name,
@@ -70,9 +78,21 @@ export function SearchPage() {
           favorite: false,
           favorite_id: null,
         });
+        setStates({
+          status: "succes",
+          data:setData,
+          error: null
+        })
         console.log(state);
       })
-      .catch((error) => console.log(error));
+      //.catch((error) => console.log(error));
+      .catch(()=>{
+        setStates({
+          status: "Error",
+          data: null,
+          error: "There is no users with that name, try again"
+        })
+      })
   }
 
   function showFollowers() {
@@ -84,12 +104,14 @@ export function SearchPage() {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log("DATA", states)
         console.log(
           "%c 🇹🇿: showFollowers -> data ",
           "font-size:16px;background-color:#5cf153;color:black;",
           data,
           data.length
         );
+
       });
   }
 
@@ -215,7 +237,10 @@ export function SearchPage() {
         ></C.Search>
         <button type="submit">Search</button>
       </C.Form>
-
+    {status === "idle" && <div><BsGithub style={{height:"7.5em", width:"7.5em"}}/><p style={{fontWeight: "700", fontSize: "20px", lineHeight: "25px", textAlign: "center"}}>No users...</p> </div>}
+    {status === "loading" && <div><BsGithub style={{height:"7.5em", width:"7.5em"}}/><p style={{fontWeight: "700", fontSize: "20px", lineHeight: "25px", textAlign: "center"}}>Retrieven user...</p></div>}
+    {status === "error" && <p>{states.error}</p>}
+    {status === "succes" && (
       <div
         style={{
           display: "flex",
@@ -319,7 +344,9 @@ export function SearchPage() {
             <GiRoundStar />
           </NavLink>
         </Footer>
+        
       </div>
+      )}
     </C.Container>
   );
 }
