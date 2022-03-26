@@ -1,6 +1,9 @@
 import { tokenKey, BASE_URI } from "../config";
 
-export default async function apiFetch(endpoint, { method, headers, body } = {}) {
+export default async function apiFetch(
+  endpoint,
+  { method, headers, body } = {}
+) {
   const token = sessionStorage.getItem(tokenKey);
 
   if (token) {
@@ -23,14 +26,14 @@ export default async function apiFetch(endpoint, { method, headers, body } = {})
     body: body ? JSON.stringify(body) : null,
   };
 
-  console.log(BASE_URI + endpoint)
+  console.log(BASE_URI + endpoint);
 
   const response = await fetch(BASE_URI + endpoint, config);
 
   let data;
   if (!response.ok) {
     console.log(response);
-    if ((response.status = 401)) sessionStorage.removeItem(tokenKey);
+    if (response.status === 401) sessionStorage.removeItem(tokenKey);
     try {
       data = await response.json();
     } catch (error) {

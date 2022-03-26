@@ -1,20 +1,11 @@
-import { useEffect } from "react";
-import { destroyFavorite, favorites } from "../services/favorite-service";
-import { useState } from "react";
 import { FavoriteStar } from "./search-page";
+import { useAuth } from "../context/auth-context";
 
 function FavoritesPage() {
-  const [myFavorites, setMyFavorites] = useState([]);
-
-  useEffect(() => {
-    favorites().then(setMyFavorites);
-  }, []);
+  const { myFavorites, unfavorite } = useAuth();
 
   function handleRemoveFavorite(id) {
-    destroyFavorite(id);
-    const listFavorites = myFavorites.filter((favorite) => favorite.id !== id);
-    setMyFavorites(listFavorites);
-    localStorage.setItem("favorites", JSON.stringify(listFavorites));
+    unfavorite(id);
   }
 
   const Holi = () => {
