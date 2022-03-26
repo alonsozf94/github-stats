@@ -11,6 +11,7 @@ import { BsFillPersonFill } from "react-icons/bs";
 import { RiSearchFill } from "react-icons/ri";
 import { GiRoundStar } from "react-icons/gi";
 import { createFavorite, destroyFavorite } from "../services/favorite-service";
+import * as C from "./componentStyled/componentStyled";
 
 const initialState = {
   nickName: null,
@@ -194,77 +195,6 @@ export function SearchPage() {
     localStorage.setItem("data", JSON.stringify(data));
   }
 
-  const Container = styled.div`
-    max-width: 480px;
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-    align-items: center;
-    margin-top: 32px;
-  `;
-
-  const Form = styled.form`
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 20px;
-  `;
-
-  const Search = styled.input`
-    padding: 0.25rem 0.5rem;
-    width: fit-content;
-    background: white;
-    box-shadow: 2px 2px 0 0 rgb(0, 0, 0, 0.25);
-    border: none;
-  `;
-
-  const Avatar = styled.img`
-    width: 120px;
-    border-radius: 50%;
-  `;
-
-  const Name = styled.h1`
-    font-family: "Source Code Pro";
-    font-style: normal;
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 25px;
-    text-align: center;
-    color: #000000;
-  `;
-
-  const Card = styled(NavLink)`
-    cursor: pointer;
-    height: 140px;
-    width: 140px;
-    background: rgba(255, 255, 255, 1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 2px 2px 0 0 rgb(0, 0, 0, 0.25);
-    text-decoration: none;
-  `;
-
-  const Number = styled.p`
-    font-family: "Source Code Pro";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 28px;
-    line-height: 35px;
-    text-align: center;
-    color: black;
-  `;
-
-  const Text = styled.p`
-    font-family: "Source Code Pro";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 20px;
-    text-align: center;
-    color: black;
-  `;
-
   const Footer = styled.div`
     position: absolute;
     bottom: 0px;
@@ -274,17 +204,17 @@ export function SearchPage() {
   `;
 
   return (
-    <Container>
-      <Form onSubmit={handleSubmit}>
-        <Search
+    <C.Container>
+      <C.Form onSubmit={handleSubmit}>
+        <C.Search
           id="search"
           placeholder="username"
           name="name"
           value={query}
           onChange={({ target }) => setQuery(target.value)}
-        ></Search>
+        ></C.Search>
         <button type="submit">Search</button>
-      </Form>
+      </C.Form>
 
       <div
         style={{
@@ -295,7 +225,7 @@ export function SearchPage() {
           alignItems: "center",
         }}
       >
-        <Avatar src={state.urlAvatar} alt="avatar" />
+        <C.Avatar src={state.urlAvatar} alt="avatar" />
         <div
           style={{
             display: "flex",
@@ -304,7 +234,7 @@ export function SearchPage() {
             alignItems: "center",
           }}
         >
-          <Name>{state.name}</Name>
+          <C.Name>{state.name}</C.Name>
           {state.favorite ? (
             <FavoriteStar />
           ) : (
@@ -320,7 +250,7 @@ export function SearchPage() {
             gap: "1rem",
           }}
         >
-          <Card
+          <C.Card
             to={"/followers"}
             onClick={showFollowers}
             style={{ cursor: "pointer" }}
@@ -328,11 +258,11 @@ export function SearchPage() {
             <MdGroups
               style={{ width: "50px", height: "50px", color: "#2D9CDB" }}
             />
-            <Number>{state.cantFollowers}</Number>
-            <Text>followers</Text>
-          </Card>
+            <C.Number>{state.cantFollowers}</C.Number>
+            <C.Text>followers</C.Text>
+          </C.Card>
 
-          <Card
+          <C.Card
             to={"/following"}
             onClick={showFollowing}
             style={{ cursor: "pointer" }}
@@ -340,25 +270,33 @@ export function SearchPage() {
             <RiUserFollowLine
               style={{ width: "50px", height: "50px", color: "#F2994A" }}
             />
-            <Number>{state.cantFollowing}</Number>
-            <Text>following</Text>
-          </Card>
+            <C.Number>{state.cantFollowing}</C.Number>
+            <C.Text>following</C.Text>
+          </C.Card>
 
-          <Card to={"/repos"} onClick={showRepos} style={{ cursor: "pointer" }}>
+          <C.Card
+            to={"/repos"}
+            onClick={showRepos}
+            style={{ cursor: "pointer" }}
+          >
             <FaBook
               style={{ width: "50px", height: "50px", color: "#219653" }}
             />
-            <Number>{state.cantFollowing}</Number>
-            <Text>Public Repos</Text>
-          </Card>
+            <C.Number>{state.cantFollowing}</C.Number>
+            <C.Text>Public Repos</C.Text>
+          </C.Card>
 
-          <Card to={"/gists"} onClick={showGists} style={{ cursor: "pointer" }}>
+          <C.Card
+            to={"/gists"}
+            onClick={showGists}
+            style={{ cursor: "pointer" }}
+          >
             <BsFileCodeFill
               style={{ width: "50px", height: "50px", color: "#828282" }}
             />
-            <Number>{state.cantGists}</Number>
-            <Text>Public Gists</Text>
-          </Card>
+            <C.Number>{state.cantGists}</C.Number>
+            <C.Text>Public Gists</C.Text>
+          </C.Card>
         </div>
 
         <Footer>
@@ -382,6 +320,6 @@ export function SearchPage() {
           </NavLink>
         </Footer>
       </div>
-    </Container>
+    </C.Container>
   );
 }
