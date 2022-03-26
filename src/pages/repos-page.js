@@ -26,6 +26,7 @@ function ReposPage() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
+          backgroundColor: "pink",
         }}
       >
         <p> {repository.full_name} </p>

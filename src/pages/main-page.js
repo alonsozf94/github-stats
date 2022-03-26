@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
 import ReactDOM from "react-dom";
+import { RiStarFill } from "react-icons/ri";
+import { createFavorite, destroyFavorite } from "../services/favorite-service";
 
 const initialState = {
   nickName: null,
@@ -11,10 +13,18 @@ const initialState = {
   cantFollowing: null,
   cantPublic_gists: null,
   cantPublic_repos: null,
+  favorite: false,
 };
+
+const FavoriteStar = styled(RiStarFill)`
+  color: yellow;
+`;
 
 export function MainPage() {
   const [query, setQuery] = useState("");
+  const [favorites, setFavorites] = useState(
+    JSON.parse(localStorage.getItem("data")) || initialState
+  );
   const [state, setData] = useState(
     JSON.parse(localStorage.getItem("data")) || initialState
   );
@@ -46,6 +56,7 @@ export function MainPage() {
           cantFollowing: data.following,
           cantGists: data.public_gists,
           cantRepos: data.public_repos,
+          favorite: false,
         });
         console.log(state);
       })
@@ -130,6 +141,29 @@ export function MainPage() {
       .catch((error) => console.log(error));
   }
 
+  function HandleCreateFavorite(event) {
+    event.preventDefault();
+    createFavorite({
+      name: state.name,
+      username: state.nickName,
+      avatar_url: state.urlAvatar,
+    }).then(setFavorites);
+    const data = state;
+    data.favorite = true;
+    setData((data) => {
+      setFavorites(data);
+      localStorage.setItem("data", JSON.stringify(data));
+    });
+  }
+
+  async function handleRemoveFavorite(id) {
+    await destroyFavorite(id);
+    const data = state;
+    data.favorite = false;
+    setData(data);
+    localStorage.setItem("data", JSON.stringify(data));
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -146,8 +180,14 @@ export function MainPage() {
       <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
         <h4>{state.nickName}</h4>
         <img src={state.urlAvatar} alt="avatar" style={{ width: "250px" }} />
+        <h2>{state.name}</h2>
+        <div
+          onClick={state.favorite || HandleCreateFavorite}
+          style={{ cursor: "pointer" }}
+        >
+          {state.favorite ? <FavoriteStar /> : <RiStarFill />}
+        </div>
         <p>{state.description}</p>
-
         <NavLink
           to={"/followers"}
           onClick={showFollowers}
@@ -155,7 +195,6 @@ export function MainPage() {
         >
           followers: {state.cantFollowers}
         </NavLink>
-
         <NavLink
           to={"/following"}
           onClick={showFollowing}
@@ -163,7 +202,6 @@ export function MainPage() {
         >
           followings: {state.cantFollowing}
         </NavLink>
-
         <NavLink
           to={"/repos"}
           onClick={showRepos}
@@ -171,7 +209,6 @@ export function MainPage() {
         >
           repos: {state.cantRepos}
         </NavLink>
-
         <NavLink
           to={"/gists"}
           onClick={showGists}
