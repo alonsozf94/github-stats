@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import styled from "@emotion/styled";
+import { NavLink } from "react-router-dom";
+import ReactDOM from "react-dom";
 
 const initialState = {
   nickName: null,
@@ -12,7 +15,14 @@ const initialState = {
 
 export function MainPage() {
   const [query, setQuery] = useState("");
-  const [state, setData] = useState(initialState);
+  const [state, setData] = useState(
+    JSON.parse(localStorage.getItem("data")) || initialState
+  );
+
+  useEffect(() => {
+    if (state.nickName !== null)
+      localStorage.setItem("data", JSON.stringify(state));
+  }, [state]);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -24,7 +34,6 @@ export function MainPage() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setData({
           nickName: data.login,
           name: data.name,
@@ -38,12 +47,12 @@ export function MainPage() {
           cantGists: data.public_gists,
           cantRepos: data.public_repos,
         });
+        console.log(state);
       })
       .catch((error) => console.log(error));
   }
 
   function showFollowers() {
-    console.log(state.urlFollowers);
     fetch(state.urlFollowers.concat(`?per_page=7&page=${2}&tab=followers`), {
       headers: {
         Authorization:
@@ -133,21 +142,44 @@ export function MainPage() {
         ></input>
         <button type="submit">Search</button>
       </form>
-      <h4>{state.nickName}</h4>
-      <img src={state.urlAvatar} alt="avatar" />
-      <p>{state.description}</p>
-      <p onClick={showFollowers} style={{ cursor: "pointer" }}>
-        followers: {state.cantFollowers}
-      </p>
-      <p onClick={showFollowing} style={{ cursor: "pointer" }}>
-        followings: {state.cantFollowing}
-      </p>
-      <p onClick={showRepos} style={{ cursor: "pointer" }}>
-        repos: {state.cantRepos}
-      </p>
-      <p onClick={showGists} style={{ cursor: "pointer" }}>
-        public gists: {state.cantGists}
-      </p>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+        <h4>{state.nickName}</h4>
+        <img src={state.urlAvatar} alt="avatar" style={{ width: "250px" }} />
+        <p>{state.description}</p>
+
+        <NavLink
+          to={"/followers"}
+          onClick={showFollowers}
+          style={{ cursor: "pointer" }}
+        >
+          followers: {state.cantFollowers}
+        </NavLink>
+
+        <NavLink
+          to={"/following"}
+          onClick={showFollowing}
+          style={{ cursor: "pointer" }}
+        >
+          followings: {state.cantFollowing}
+        </NavLink>
+
+        <NavLink
+          to={"/repos"}
+          onClick={showRepos}
+          style={{ cursor: "pointer" }}
+        >
+          repos: {state.cantRepos}
+        </NavLink>
+
+        <NavLink
+          to={"/gists"}
+          onClick={showGists}
+          style={{ cursor: "pointer" }}
+        >
+          public gists: {state.cantGists}
+        </NavLink>
+      </div>
     </div>
   );
 }
