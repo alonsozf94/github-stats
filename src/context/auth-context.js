@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login, logout } from "../services/session-service";
-import { createUser, getUser } from "../services/users-service";
+import { createUser, getUser, updateUser } from "../services/users-service";
 
 const AuthContext = createContext();
 
@@ -25,7 +25,14 @@ function AuthProvider({ children }) {
   function handleSignup(userData) {
     return createUser(userData).then((user) => {
       setUser(user);
-      navigate("/search")
+      navigate("/search");
+    });
+  }
+
+  function handleUpdate(userData) {
+    return updateUser(userData).then((user) => {
+      setUser(user);
+      navigate("/home");
     });
   }
 
@@ -43,6 +50,7 @@ function AuthProvider({ children }) {
         login: handleLogin,
         signup: handleSignup,
         logout: handleLogout,
+        update: handleUpdate,
       }}
     >
       {children}
