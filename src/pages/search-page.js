@@ -363,7 +363,7 @@ export function SearchPage() {
 
         <Footer>
           <NavLink
-            to={"/"}
+            to={"/profile"}
             style={{ cursor: "pointer", color: "#828282", width: "45px" }}
           >
             <BsFillPersonFill />

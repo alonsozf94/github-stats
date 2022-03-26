@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { destroyFavorite, favorites } from "../services/favorite-service";
 import { useState } from "react";
-import { FavoriteStar } from "./main-page";
+import { FavoriteStar } from "./search-page";
 
 function FavoritesPage() {
   const [myFavorites, setMyFavorites] = useState([]);
@@ -12,9 +12,7 @@ function FavoritesPage() {
 
   function handleRemoveFavorite(id) {
     destroyFavorite(id);
-    console.log("lista de favoritos completo", myFavorites);
     const listFavorites = myFavorites.filter((favorite) => favorite.id !== id);
-    console.log("lista de favoritos extraido", myFavorites);
     setMyFavorites(listFavorites);
     localStorage.setItem("favorites", JSON.stringify(listFavorites));
   }
