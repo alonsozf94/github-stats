@@ -3,6 +3,13 @@ import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
 import ReactDOM from "react-dom";
 import { RiStarFill } from "react-icons/ri";
+import { MdGroups } from "react-icons/md";
+import { BsFileCodeFill } from "react-icons/bs";
+import { FaBook } from "react-icons/fa";
+import { RiUserFollowLine } from "react-icons/ri";
+import { BsFillPersonFill } from "react-icons/bs";
+import { RiSearchFill } from "react-icons/ri";
+import { GiRoundStar } from "react-icons/gi";
 import { createFavorite, destroyFavorite } from "../services/favorite-service";
 
 const initialState = {
@@ -14,16 +21,19 @@ const initialState = {
   cantPublic_gists: null,
   cantPublic_repos: null,
   favorite: false,
+  favorite_id: null,
 };
 
-const FavoriteStar = styled(RiStarFill)`
+export const FavoriteStar = styled(RiStarFill)`
   color: yellow;
 `;
 
-export function MainPage() {
+const Star = styled(RiStarFill)``;
+
+export function SearchPage() {
   const [query, setQuery] = useState("");
   const [favorites, setFavorites] = useState(
-    JSON.parse(localStorage.getItem("data")) || initialState
+    JSON.parse(localStorage.getItem("favorites")) || []
   );
   const [state, setData] = useState(
     JSON.parse(localStorage.getItem("data")) || initialState
@@ -57,6 +67,7 @@ export function MainPage() {
           cantGists: data.public_gists,
           cantRepos: data.public_repos,
           favorite: false,
+          favorite_id: null,
         });
         console.log(state);
       })
@@ -141,18 +152,34 @@ export function MainPage() {
       .catch((error) => console.log(error));
   }
 
-  function HandleCreateFavorite(event) {
-    event.preventDefault();
+  function HandleCreateFavorite() {
     createFavorite({
       name: state.name,
       username: state.nickName,
       avatar_url: state.urlAvatar,
-    }).then(setFavorites);
-    const data = state;
-    data.favorite = true;
-    setData((data) => {
-      setFavorites(data);
-      localStorage.setItem("data", JSON.stringify(data));
+    }).then((data) => {
+      console.log(
+        "%c 🐓: HandleCreateFavorite -> data ",
+        "font-size:16px;background-color:#f03f86;color:white;",
+        favorites
+      );
+      const newFavorite = {
+        id: data.id,
+        username: data.username,
+        name: data.name,
+        avatar_url: data.avatar_url,
+      };
+      setFavorites([...favorites, newFavorite]);
+      localStorage.setItem(
+        "favorites",
+        JSON.stringify([...favorites, newFavorite])
+      );
+      const dat = state;
+      dat.favorite = true;
+      dat.favorite_id = data.id;
+      setData(dat);
+      console.log(favorites);
+      console.log(state);
     });
   }
 
@@ -160,63 +187,201 @@ export function MainPage() {
     await destroyFavorite(id);
     const data = state;
     data.favorite = false;
+    const listFavorites = favorites.filter((fav) => fav.id !== id);
+    console.log("lista de favoritos", listFavorites);
+    setFavorites(listFavorites);
     setData(data);
     localStorage.setItem("data", JSON.stringify(data));
   }
 
+  const Container = styled.div`
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    align-items: center;
+    margin-top: 32px;
+  `;
+
+  const Form = styled.form`
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 20px;
+  `;
+
+  const Search = styled.input`
+    padding: 0.25rem 0.5rem;
+    width: fit-content;
+    background: white;
+    box-shadow: 2px 2px 0 0 rgb(0, 0, 0, 0.25);
+    border: none;
+  `;
+
+  const Avatar = styled.img`
+    width: 120px;
+    border-radius: 50%;
+  `;
+
+  const Name = styled.h1`
+    font-family: "Source Code Pro";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 25px;
+    text-align: center;
+    color: #000000;
+  `;
+
+  const Card = styled(NavLink)`
+    cursor: pointer;
+    height: 140px;
+    width: 140px;
+    background: rgba(255, 255, 255, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 2px 0 0 rgb(0, 0, 0, 0.25);
+    text-decoration: none;
+  `;
+
+  const Number = styled.p`
+    font-family: "Source Code Pro";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 35px;
+    text-align: center;
+    color: black;
+  `;
+
+  const Text = styled.p`
+    font-family: "Source Code Pro";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+    color: black;
+  `;
+
+  const Footer = styled.div`
+    position: absolute;
+    bottom: 0px;
+    display: flex;
+    width: 30%;
+    justify-content: space-between;
+  `;
+
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input
+    <Container>
+      <Form onSubmit={handleSubmit}>
+        <Search
           id="search"
-          placeholder="escribe el nombre de usuario..."
+          placeholder="username"
           name="name"
           value={query}
           onChange={({ target }) => setQuery(target.value)}
-        ></input>
+        ></Search>
         <button type="submit">Search</button>
-      </form>
+      </Form>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-        <h4>{state.nickName}</h4>
-        <img src={state.urlAvatar} alt="avatar" style={{ width: "250px" }} />
-        <h2>{state.name}</h2>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "0.5rem",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Avatar src={state.urlAvatar} alt="avatar" />
         <div
-          onClick={state.favorite || HandleCreateFavorite}
-          style={{ cursor: "pointer" }}
+          style={{
+            display: "flex",
+            gap: "4px",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
-          {state.favorite ? <FavoriteStar /> : <RiStarFill />}
+          <Name>{state.name}</Name>
+          {state.favorite ? (
+            <FavoriteStar />
+          ) : (
+            <Star onClick={HandleCreateFavorite} />
+          )}
         </div>
         <p>{state.description}</p>
-        <NavLink
-          to={"/followers"}
-          onClick={showFollowers}
-          style={{ cursor: "pointer" }}
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
+            gap: "1rem",
+          }}
         >
-          followers: {state.cantFollowers}
-        </NavLink>
-        <NavLink
-          to={"/following"}
-          onClick={showFollowing}
-          style={{ cursor: "pointer" }}
-        >
-          followings: {state.cantFollowing}
-        </NavLink>
-        <NavLink
-          to={"/repos"}
-          onClick={showRepos}
-          style={{ cursor: "pointer" }}
-        >
-          repos: {state.cantRepos}
-        </NavLink>
-        <NavLink
-          to={"/gists"}
-          onClick={showGists}
-          style={{ cursor: "pointer" }}
-        >
-          public gists: {state.cantGists}
-        </NavLink>
+          <Card
+            to={"/followers"}
+            onClick={showFollowers}
+            style={{ cursor: "pointer" }}
+          >
+            <MdGroups
+              style={{ width: "50px", height: "50px", color: "#2D9CDB" }}
+            />
+            <Number>{state.cantFollowers}</Number>
+            <Text>followers</Text>
+          </Card>
+
+          <Card
+            to={"/following"}
+            onClick={showFollowing}
+            style={{ cursor: "pointer" }}
+          >
+            <RiUserFollowLine
+              style={{ width: "50px", height: "50px", color: "#F2994A" }}
+            />
+            <Number>{state.cantFollowing}</Number>
+            <Text>following</Text>
+          </Card>
+
+          <Card to={"/repos"} onClick={showRepos} style={{ cursor: "pointer" }}>
+            <FaBook
+              style={{ width: "50px", height: "50px", color: "#219653" }}
+            />
+            <Number>{state.cantFollowing}</Number>
+            <Text>Public Repos</Text>
+          </Card>
+
+          <Card to={"/gists"} onClick={showGists} style={{ cursor: "pointer" }}>
+            <BsFileCodeFill
+              style={{ width: "50px", height: "50px", color: "#828282" }}
+            />
+            <Number>{state.cantGists}</Number>
+            <Text>Public Gists</Text>
+          </Card>
+        </div>
+
+        <Footer>
+          <NavLink
+            to={"/"}
+            style={{ cursor: "pointer", color: "#828282", width: "45px" }}
+          >
+            <BsFillPersonFill />
+          </NavLink>
+          <NavLink
+            to={"/"}
+            style={{ cursor: "pointer", color: "#828282", width: "45px" }}
+          >
+            <RiSearchFill />
+          </NavLink>
+          <NavLink
+            to={"/favorites"}
+            style={{ cursor: "pointer", color: "#828282", width: "45px" }}
+          >
+            <GiRoundStar />
+          </NavLink>
+        </Footer>
       </div>
-    </div>
+    </Container>
   );
 }
