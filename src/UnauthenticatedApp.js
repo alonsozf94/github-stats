@@ -33,11 +33,11 @@ function UnauthenticatedApp() {
     <Section>
       <Container>
         <Title size="xl" bold>
-          Welcome to GithubStats
+          Welcome to Github Stats
         </Title>
         {showLogin ? <LoginForm /> : <SignupForm />}
         <CustomLink size="lg" onClick={handleLinkClick}>
-          {showLogin ? "CreateAccount" : "Login"}
+          {showLogin ? "Create Account" : "Login"}
         </CustomLink>
       </Container>
     </Section>

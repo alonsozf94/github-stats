@@ -19,16 +19,27 @@ export default function LoginForm() {
     password: "",
   })
 
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+    first_name: "",
+    last_name: "",
+  });
+
   function handleSubmit(event) {
     event.preventDefault();
 
-    login(form).catch((error) => console.log(error));
+    login(form).catch((error) => {
+      const newErrors = JSON.parse(error);
+      setErrors({ ...errors, ...newErrors });
+    });
   }
 
   function handleFormChange(event) {
     const { name, value } = event.target;
 
     setForm({ ...form, [name]: value });
+    setErrors({ ...errors, [name]: "" });
   }
   
   return (
@@ -40,6 +51,7 @@ export default function LoginForm() {
         placeholder="example@mail.com"
         value={form.email}
         onChange={handleFormChange}
+        error={errors.toString()}
       />
       <Input
         id="password"
@@ -48,6 +60,7 @@ export default function LoginForm() {
         placeholder="******"
         value={form.password}
         onChange={handleFormChange}
+        error={errors.toString()}
       />
       <Button fullWidth type="submit">
         Login
