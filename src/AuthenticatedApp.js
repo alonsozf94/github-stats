@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import { Route, Routes, Link } from "react-router-dom";
+import { Route, Routes, Link, Navigate } from "react-router-dom";
 import { CustomLink } from "./components/custom-link";
+import { SearchPage } from "./pages/main-page";
 import { useAuth } from "./context/auth-context";
 import ProfilePage from "./pages/profile";
 import Text from "./components/text";
@@ -21,6 +22,11 @@ const Container = styled.div`
 `;
 
 const Title = Text.withComponent("h1");
+import FollowersPage from "./pages/follower-page";
+import FollowingPage from "./pages/following-page";
+import ReposPage from "./pages/repos-page";
+import GistsPage from "./pages/gists-page";
+import FavoritesPage from "./pages/favorites-page";
 
 function AuthenticatedApp() {
   const { logout } = useAuth();
@@ -32,25 +38,36 @@ function AuthenticatedApp() {
       .catch((error) => console.log(error));
   }, []);
 
-  return (
-    <Section>
-      <Container>
-        <Title size="xl" bold>
-          Profile
-        </Title>
-        <ProfilePage
-          email={user.email}
-          password={user.password}
-          first_name={user.first_name}
-          last_name={user.last_name}
-        />
-        <CustomLink size="lg" onClick={logout}>
-          Logout
-        </CustomLink>
-      </Container>
-    </Section>
-    
-  )
+   <Routes>
+      <Route index element={<Navigate to="home" />} />
+      <Route path="/home" element={<SearchPage />} />
+      <Route path="/profile" element={
+        <Section>
+          <Container>
+            <Title size="xl" bold>
+              Profile
+            </Title>
+            <ProfilePage
+              email={user.email}
+              password={user.password}
+              first_name={user.first_name}
+              last_name={user.last_name}
+            />
+            <CustomLink size="lg" onClick={logout}>
+              Logout
+            </CustomLink>
+          </Container>
+       </Section>
+      } />
+      <Route path="/followers" element={<FollowersPage />} />
+      <Route path="/following" element={<FollowingPage />} />
+      <Route path="/repos" element={<ReposPage />} />
+      <Route path="/gists" element={<GistsPage />} />
+      <Route path="/favorites" element={<FavoritesPage />} />
+      <Route path="*" element={<Navigate to="/home" />} />
+    </Routes>
+  );
+
 }
 
 export default AuthenticatedApp;
