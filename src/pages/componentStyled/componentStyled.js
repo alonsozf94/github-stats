@@ -106,6 +106,7 @@ export const NumberPage = styled.div`
   justify-content: center;
 `;
 export const Title = styled.h1`
+  margin-bottom: 30px;
   font-family: "Source Code Pro";
   font-style: normal;
   font-weight: 400;
