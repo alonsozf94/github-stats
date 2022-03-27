@@ -7,7 +7,7 @@ import { BsFileCodeFill } from "react-icons/bs";
 import { FaBook } from "react-icons/fa";
 import { RiUserFollowLine } from "react-icons/ri";
 import { BsGithub } from "react-icons/bs";
-import * as C from "./componentStyled/componentStyled";
+import * as C from "./utils-page/componentStyled";
 import { useAuth } from "../context/auth-context";
 
 export const FavoriteStar = styled(FaStar)`
@@ -139,7 +139,7 @@ export function SearchPage() {
               <FaBook
                 style={{ width: "50px", height: "50px", color: "#219653" }}
               />
-              <C.Number>{searchedUser.cantFollowing}</C.Number>
+              <C.Number>{searchedUser.cantRepos}</C.Number>
               <C.Text>Public Repos</C.Text>
             </C.Card>
 

@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
+import { colors } from "../../styles/colors";
 
 export const Container = styled.div`
   max-width: 480px;
@@ -93,8 +94,7 @@ export const NumberPage = styled.div`
   width: 26px;
   height: 22px;
   border-radius: 50%;
-  background: #2d9cdb;
-  color: white;
+  color: black;
   font-family: "Source Code Pro";
   font-style: normal;
   font-weight: 400;
@@ -103,6 +103,7 @@ export const NumberPage = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `;
 export const Title = styled.h1`
   margin-bottom: 30px;
@@ -157,4 +158,29 @@ export const Username = styled.div`
   font-size: 12px;
   line-height: 15px;
   color: #000000;
+`;
+
+export const RepoCard = styled.div`
+  padding: 8px 12px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: flex-start;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  background-color: white;
+`;
+export const RepoName = styled.p`
+  color: ${colors.blue[1]};
+  font-weight: bold;
+`;
+export const RepoSpecs = styled.div`
+  display: flex;
+  gap: 16px;
+`;
+export const RepoSpecsItem = styled.div`
+  display: flex;
+  gap: 4px;
+  align-items: center;
 `;
