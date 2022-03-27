@@ -6,7 +6,7 @@ import * as C from "./componentStyled/componentStyled";
 
 function FavoritesPage() {
   const { myFavorites, unfavorite } = useAuth();
-
+  console.log(myFavorites);
   function handleRemoveFavorite(id) {
     unfavorite(id);
   }
@@ -31,7 +31,7 @@ function FavoritesPage() {
     // const cantPages = Math.ceil((myFavorites.length * 1) / 7.0);
     const array = Array.from(Array(1).keys());
     return array.map((number) => (
-      <C.Pages>
+      <C.Pages key={number}>
         <FaLessThan />
         <C.NumberPage>{number + 1}</C.NumberPage>
         <FaGreaterThan />

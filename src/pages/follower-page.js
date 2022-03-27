@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as C from "./componentStyled/componentStyled";
 import { FaGreaterThan } from "react-icons/fa";
 import { FaLessThan } from "react-icons/fa";
@@ -6,12 +6,15 @@ import { useAuth } from "../context/auth-context";
 
 function FollowersPage() {
   const { followers, searchedUser, getFollowers } = useAuth();
+  const [PageRange, setPageRange] = useState({ p: 1, r: 1 });
+  const TotalFollowers = searchedUser.cantFollowers;
+  const TotalPages = Math.ceil((TotalFollowers * 1) / 7);
 
   useEffect(() => {
-    getFollowers(searchedUser.urlFollowers);
-  });
+    getFollowers(searchedUser.urlFollowers, PageRange.p);
+  }, [PageRange]);
 
-  const Haters = () => {
+  const ListFollowers = () => {
     if (!followers) return <h1>Aún no tiene Followers!!!!</h1>;
     return followers.map((follower) => (
       <C.CardContainer
@@ -25,25 +28,63 @@ function FollowersPage() {
   };
 
   const ContainerPages = () => {
-    // const cantFollowers = JSON.parse(
-    //   localStorage.getItem("data")
-    // ).cantFollowers;
-    // const cantPages = Math.ceil((cantFollowers * 1) / 7.0);
-    const array = Array.from(Array(1).keys());
-    return array.map((number) => (
-      <C.Pages keys={number}>
-        <FaLessThan />
-        <C.NumberPage>{number + 1}</C.NumberPage>
-        <FaGreaterThan />
-      </C.Pages>
-    ));
+    let arrayPages = Array.from([0, 1, 2, 3, 4], (x) => x + PageRange.r);
+    return arrayPages.map((number) =>
+      TotalPages >= number ? (
+        <C.Pages keys={number}>
+          <C.NumberPage
+            onClick={() => setPageRange({ p: number, r: PageRange.r })}
+            style={
+              PageRange.p === number
+                ? { backgroundColor: "#2D9CDB", color: "white" }
+                : {}
+            }
+          >
+            {number}
+          </C.NumberPage>
+        </C.Pages>
+      ) : (
+        ""
+      )
+    );
   };
 
   return (
     <C.Section>
-      <C.Title>Favorites ({searchedUser.cantFollowers})</C.Title>
-      <ContainerPages />
-      <Haters />
+      <C.Title>Favorites ({TotalFollowers})</C.Title>
+      <div
+        style={{
+          display: "flex",
+          gap: "4px",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <FaLessThan
+          onClick={() =>
+            PageRange.r > 1
+              ? setPageRange({
+                  p: Math.floor(PageRange.p / 5) * 5,
+                  r: PageRange.r - 5,
+                })
+              : ""
+          }
+          style={{ cursor: "pointer" }}
+        />
+        <ContainerPages />
+        <FaGreaterThan
+          onClick={() =>
+            TotalPages > PageRange.r + 5
+              ? setPageRange({
+                  p: Math.ceil(PageRange.p / 5) * 5 + 1,
+                  r: PageRange.r + 5,
+                })
+              : ""
+          }
+          style={{ cursor: "pointer" }}
+        />
+      </div>
+      <ListFollowers />
     </C.Section>
   );
 }

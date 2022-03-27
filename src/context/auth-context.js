@@ -21,6 +21,9 @@ function AuthProvider({ children }) {
   const [following, setFollowing] = useState(
     JSON.parse(localStorage.getItem("following")) || null
   );
+  const [repos, setRepos] = useState(
+    JSON.parse(localStorage.getItem("repos")) || null
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -96,8 +99,8 @@ function AuthProvider({ children }) {
       .catch(() => setStatus("error"));
   }
 
-  function handleShowFollowers(url) {
-    fetch(url.concat(`?per_page=7&page=${1}&tab=followers`), {
+  function handleShowFollowers(url, page) {
+    fetch(url.concat(`?per_page=7&page=${page}&tab=followers`), {
       headers: {
         Authorization:
           "Basic UnViZW5TYW5kcm86Z2hwXzlJUmhaWjJWTjd6WmdMRkRqVk5jcjUxc3BUcG81MjN6Ym1XcQ==",
@@ -109,8 +112,8 @@ function AuthProvider({ children }) {
       });
   }
 
-  function handleShowFollowing(url) {
-    fetch(url.concat(`?per_page=7&page=${1}&tab=followers`), {
+  function handleShowFollowing(url, page) {
+    fetch(url.concat(`?per_page=7&page=${page}&tab=following`), {
       headers: {
         Authorization:
           "Basic UnViZW5TYW5kcm86Z2hwXzlJUmhaWjJWTjd6WmdMRkRqVk5jcjUxc3BUcG81MjN6Ym1XcQ==",
@@ -122,8 +125,20 @@ function AuthProvider({ children }) {
       });
   }
 
+  function handleShowRepos(url, page) {
+    fetch(url.concat(`?per_page=7&page=${page}&tab=repos`), {
+      headers: {
+        Authorization:
+          "Basic UnViZW5TYW5kcm86Z2hwXzlJUmhaWjJWTjd6WmdMRkRqVk5jcjUxc3BUcG81MjN6Ym1XcQ==",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setRepos(data);
+      });
+  }
+
   function HandleCreateFavorite() {
-    console.log(searchedUser);
     return createFavorite({
       name: searchedUser.name,
       username: searchedUser.nickName,
@@ -135,9 +150,12 @@ function AuthProvider({ children }) {
         name: data.name,
         avatar_url: data.avatar_url,
       };
-      console.log(myFavorites);
+
+      if (myFavorites && myFavorites.length > 7) {
+        setMyFavorites([...myFavorites, [newFavorite]]);
+      }
       setMyFavorites(
-        myFavorites ? [...myFavorites, newFavorite] : [newFavorite]
+        myFavorites ? [[...myFavorites, newFavorite]] : [[newFavorite]]
       );
       localStorage.setItem(
         "favorites",
@@ -186,6 +204,7 @@ function AuthProvider({ children }) {
         myFavorites,
         followers,
         following,
+        repos,
         login: handleLogin,
         signup: handleSignup,
         logout: handleLogout,
@@ -195,6 +214,7 @@ function AuthProvider({ children }) {
         unfavorite: HandleDestroyFavorite,
         getFollowers: handleShowFollowers,
         getFollowing: handleShowFollowing,
+        getRepos: handleShowRepos,
       }}
     >
       {children}

@@ -93,8 +93,7 @@ export const NumberPage = styled.div`
   width: 26px;
   height: 22px;
   border-radius: 50%;
-  background: #2d9cdb;
-  color: white;
+  color: black;
   font-family: "Source Code Pro";
   font-style: normal;
   font-weight: 400;
@@ -103,6 +102,7 @@ export const NumberPage = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `;
 export const Title = styled.h1`
   margin-bottom: 30px;
