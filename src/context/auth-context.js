@@ -151,11 +151,8 @@ function AuthProvider({ children }) {
         avatar_url: data.avatar_url,
       };
 
-      if (myFavorites && myFavorites.length > 7) {
-        setMyFavorites([...myFavorites, [newFavorite]]);
-      }
       setMyFavorites(
-        myFavorites ? [[...myFavorites, newFavorite]] : [[newFavorite]]
+        myFavorites ? [...myFavorites, newFavorite] : [newFavorite]
       );
       localStorage.setItem(
         "favorites",

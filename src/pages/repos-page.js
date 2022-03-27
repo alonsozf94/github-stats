@@ -38,8 +38,8 @@ const RepoSpecsItem = styled.div`
 function ReposPage() {
   const { repos, searchedUser, getRepos } = useAuth();
   const [PageRange, setPageRange] = useState({ p: 1, r: 1 });
-  const TotalFollowers = searchedUser.cantFollowers;
-  const TotalPages = Math.ceil((TotalFollowers * 1) / 7);
+  const TotalRepos = searchedUser.cantRepos;
+  const TotalPages = Math.ceil((TotalRepos * 1) / 7);
 
   useEffect(() => {
     getRepos(searchedUser.urlRepos, PageRange.p);
@@ -115,7 +115,7 @@ function ReposPage() {
         gap: "4px",
       }}
     >
-      <Title>Repos</Title>
+      <Title>Repos({TotalRepos})</Title>
       <div
         style={{
           display: "flex",

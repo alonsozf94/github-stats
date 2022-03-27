@@ -139,7 +139,7 @@ export function SearchPage() {
               <FaBook
                 style={{ width: "50px", height: "50px", color: "#219653" }}
               />
-              <C.Number>{searchedUser.cantFollowing}</C.Number>
+              <C.Number>{searchedUser.cantRepos}</C.Number>
               <C.Text>Public Repos</C.Text>
             </C.Card>
 
