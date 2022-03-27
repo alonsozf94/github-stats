@@ -7,10 +7,20 @@ import GistsPage from "./pages/gists-page";
 import FavoritesPage from "./pages/favorites-page";
 import ProfilePage from "./pages/profile";
 import Footer from "./pages/footer";
+import styled from "@emotion/styled";
+
+const Container = styled.div`
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
 
 function AuthenticatedApp() {
   return (
-    <>
+    <Container>
       <Routes>
         <Route index element={<Navigate to="/home" />} />
         <Route path="/home" element={<SearchPage />} />
@@ -23,7 +33,7 @@ function AuthenticatedApp() {
         <Route path="*" element={<Navigate to="/home" />} />
       </Routes>
       <Footer />
-    </>
+    </Container>
   );
 }
 
