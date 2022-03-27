@@ -329,29 +329,7 @@ export function SearchPage() {
             <C.Number>{state.cantGists}</C.Number>
             <C.Text>Public Gists</C.Text>
           </C.Card>
-        </div>
-
-        <Footer>
-          <NavLink
-            to={"/profile"}
-            style={{ cursor: "pointer", color: "#828282", width: "45px" }}
-          >
-            <BsFillPersonFill />
-          </NavLink>
-          <NavLink
-            to={"/"}
-            style={{ cursor: "pointer", color: "#828282", width: "45px" }}
-          >
-            <RiSearchFill />
-          </NavLink>
-          <NavLink
-            to={"/favorites"}
-            style={{ cursor: "pointer", color: "#828282", width: "45px" }}
-          >
-            <GiRoundStar />
-          </NavLink>
-        </Footer>
-        
+        </div>        
       </div>
       )}
     </C.Container>
