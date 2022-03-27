@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+import * as C from "./componentStyled/componentStyled";
+import { FaGreaterThan } from "react-icons/fa";
+import { FaLessThan } from "react-icons/fa";
 
 function FollowersPage() {
   const [followers, setFollowers] = useState([]);
@@ -15,21 +18,29 @@ function FollowersPage() {
       .then((data) => {
         setFollowers(data);
       });
-  }, [data]);
+  }, []);
 
   const Haters = () => {
     return followers.map((follower) => (
-      <div
-        style={{
-          display: "flex",
-          gap: "4px",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <img src={follower.avatar_url} alt="logo" style={{ width: "50px" }} />
+      <C.CardContainer key={follower.login}>
+        <C.Image src={follower.avatar_url} alt="logo" />
         <p>{follower.login}</p>
-      </div>
+      </C.CardContainer>
+    ));
+  };
+
+  const ContainerPages = () => {
+    // const cantFollowers = JSON.parse(
+    //   localStorage.getItem("data")
+    // ).cantFollowers;
+    // const cantPages = Math.ceil((cantFollowers * 1) / 7.0);
+    const array = Array.from(Array(5).keys());
+    return array.map((number) => (
+      <C.Pages keys={number}>
+        <FaLessThan />
+        <C.NumberPage>{number}</C.NumberPage>
+        <FaGreaterThan />
+      </C.Pages>
     ));
   };
 
@@ -43,13 +54,7 @@ function FollowersPage() {
         gap: "4px",
       }}
     >
-      <div style={{ display: "flex", gap: "4px" }}>
-        <p>1</p>
-        <p>2</p>
-        <p>3</p>
-        <p>4</p>
-        <p>5</p>
-      </div>
+      <ContainerPages />
       <Haters />;
     </div>
   );
