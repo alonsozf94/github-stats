@@ -14,6 +14,9 @@ function AuthProvider({ children }) {
   const [myFavorites, setMyFavorites] = useState(
     JSON.parse(localStorage.getItem("favorites")) || null
   );
+  const [followers, setFollowers] = useState(
+    JSON.parse(localStorage.getItem("followers")) || null
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -75,6 +78,20 @@ function AuthProvider({ children }) {
           favorite_id: null,
         };
         setSearchedUser(newData);
+        localStorage.setItem("data", JSON.stringify(newData));
+      });
+  }
+
+  function handleShowFollowers(url) {
+    fetch(url.concat(`?per_page=7&page=${1}&tab=followers`), {
+      headers: {
+        Authorization:
+          "Basic UnViZW5TYW5kcm86Z2hwXzlJUmhaWjJWTjd6WmdMRkRqVk5jcjUxc3BUcG81MjN6Ym1XcQ==",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setFollowers(data);
       });
   }
 
@@ -132,12 +149,14 @@ function AuthProvider({ children }) {
     );
     destroyFavorite(id);
   }
+
   return (
     <AuthContext.Provider
       value={{
         user,
         searchedUser,
         myFavorites,
+        followers,
         login: handleLogin,
         signup: handleSignup,
         logout: handleLogout,
@@ -145,6 +164,7 @@ function AuthProvider({ children }) {
         search: handleSearchUser,
         favorite: HandleCreateFavorite,
         unfavorite: HandleDestroyFavorite,
+        getFollowers: handleShowFollowers,
       }}
     >
       {children}

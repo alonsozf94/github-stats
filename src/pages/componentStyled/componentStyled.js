@@ -71,3 +71,90 @@ export const Text = styled.p`
   text-align: center;
   color: black;
 `;
+
+//----------------------
+
+export const Section = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 480px;
+  gap: 20px;
+  margin: auto;
+`;
+
+export const Pages = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const NumberPage = styled.div`
+  width: 26px;
+  height: 22px;
+  border-radius: 50%;
+  background: #2d9cdb;
+  color: white;
+  font-family: "Source Code Pro";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+export const Title = styled.h1`
+  font-family: "Source Code Pro";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 35px;
+  color: #000000;
+`;
+
+export const CardContainer = styled.div`
+  height: 56px;
+  width: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: white;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  margin: 8px 0px;
+`;
+
+export const Image = styled.img`
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+`;
+
+export const Body = styled.div`
+  height: 40px;
+  width: 200px;
+  border-radius: 50%;
+`;
+
+export const NameCard = styled.div`
+  font-family: "Source Code Pro";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  color: #000000;
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const Username = styled.div`
+  font-family: "Source Code Pro";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  color: #000000;
+`;
