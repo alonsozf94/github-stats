@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "@emotion/styled";
-import { RiStarFill } from "react-icons/ri";
+import { FaStar } from "react-icons/fa";
+import { AiOutlineStar } from "react-icons/ai";
 import { MdGroups } from "react-icons/md";
 import { BsFileCodeFill } from "react-icons/bs";
 import { FaBook } from "react-icons/fa";
@@ -9,11 +10,15 @@ import { BsGithub } from "react-icons/bs";
 import * as C from "./componentStyled/componentStyled";
 import { useAuth } from "../context/auth-context";
 
-export const FavoriteStar = styled(RiStarFill)`
+export const FavoriteStar = styled(FaStar)`
   color: yellow;
+  cursor: pointer;
 `;
 
-const Star = styled(RiStarFill)``;
+const Star = styled(AiOutlineStar)`
+  color: rgba(130, 130, 130, 1);
+  cursor: pointer;
+`;
 
 export function SearchPage() {
   const { search, searchedUser, favorite, unfavorite, status } = useAuth();
