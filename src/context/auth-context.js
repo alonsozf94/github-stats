@@ -7,6 +7,7 @@ import { createUser, getUser, updateUser } from "../services/users-service";
 const AuthContext = createContext();
 
 function AuthProvider({ children }) {
+  const [status, setStatus] = useState(localStorage.getItem("status") || "");
   const [user, setUser] = useState(null);
   const [searchedUser, setSearchedUser] = useState(
     JSON.parse(localStorage.getItem("data")) || null
@@ -49,11 +50,16 @@ function AuthProvider({ children }) {
   function handleLogout() {
     return logout().finally(() => {
       setUser(null);
+      localStorage.setItem("data", null);
+      localStorage.setItem("favorites", null);
+      localStorage.setItem("status", "");
+      sessionStorage.setItem("github-stats-token", null);
       navigate("/");
     });
   }
 
   function handleSearchUser(username) {
+    setStatus("loading");
     return fetch(`https://api.github.com/users/${username}`, {
       headers: {
         Authorization:
@@ -79,7 +85,10 @@ function AuthProvider({ children }) {
         };
         setSearchedUser(newData);
         localStorage.setItem("data", JSON.stringify(newData));
-      });
+        localStorage.setItem("status", "success");
+        setStatus("success");
+      })
+      .catch(() => setStatus("error"));
   }
 
   function handleShowFollowers(url) {
@@ -154,6 +163,7 @@ function AuthProvider({ children }) {
     <AuthContext.Provider
       value={{
         user,
+        status,
         searchedUser,
         myFavorites,
         followers,
