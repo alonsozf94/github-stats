@@ -51,7 +51,6 @@ export default function LoginForm() {
         placeholder="example@mail.com"
         value={form.email}
         onChange={handleFormChange}
-        error={errors.toString()}
       />
       <Input
         id="password"
@@ -60,7 +59,6 @@ export default function LoginForm() {
         placeholder="******"
         value={form.password}
         onChange={handleFormChange}
-        error={errors.toString()}
       />
       <Button fullWidth type="submit">
         Login
