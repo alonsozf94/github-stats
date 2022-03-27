@@ -3,7 +3,7 @@ import { useAuth } from "../context/auth-context";
 import { useState, useEffect } from "react";
 import { FaGreaterThan } from "react-icons/fa";
 import { FaLessThan } from "react-icons/fa";
-import * as C from "./componentStyled/componentStyled";
+import * as C from "./utils-page/componentStyled";
 
 function FavoritesPage() {
   const { myFavorites, unfavorite } = useAuth();

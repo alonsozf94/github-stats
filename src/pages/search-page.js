@@ -7,7 +7,7 @@ import { BsFileCodeFill } from "react-icons/bs";
 import { FaBook } from "react-icons/fa";
 import { RiUserFollowLine } from "react-icons/ri";
 import { BsGithub } from "react-icons/bs";
-import * as C from "./componentStyled/componentStyled";
+import * as C from "./utils-page/componentStyled";
 import { useAuth } from "../context/auth-context";
 
 export const FavoriteStar = styled(FaStar)`

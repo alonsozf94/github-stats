@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import * as C from "./componentStyled/componentStyled";
+import * as C from "./utils-page/componentStyled";
 import { FaGreaterThan } from "react-icons/fa";
 import { FaLessThan } from "react-icons/fa";
 import { useAuth } from "../context/auth-context";
@@ -51,7 +51,7 @@ function FollowersPage() {
 
   return (
     <C.Section>
-      <C.Title>Favorites ({TotalFollowers})</C.Title>
+      <C.Title>Followers ({TotalFollowers})</C.Title>
       <div
         style={{
           display: "flex",

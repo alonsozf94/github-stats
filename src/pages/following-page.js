@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaGreaterThan } from "react-icons/fa";
 import { FaLessThan } from "react-icons/fa";
-import * as C from "./componentStyled/componentStyled";
+import * as C from "./utils-page/componentStyled";
 import { useAuth } from "../context/auth-context";
 
 function FollowersPage() {

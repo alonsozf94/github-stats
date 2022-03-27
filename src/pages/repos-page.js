@@ -1,39 +1,12 @@
-import styled from "@emotion/styled";
 import { useState, useEffect } from "react";
-import { colors } from "../styles";
 import { CgGitFork } from "react-icons/cg";
 import { RiStarLine } from "react-icons/ri";
 import { VscCircleLargeFilled } from "react-icons/vsc";
-import { Title } from "./componentStyled/componentStyled";
+import { Title } from "./utils-page/componentStyled";
 import { useAuth } from "../context/auth-context";
 import { FaGreaterThan } from "react-icons/fa";
 import { FaLessThan } from "react-icons/fa";
-import * as C from "./componentStyled/componentStyled";
-
-const RepoCard = styled.div`
-  padding: 8px 12px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  justify-content: flex-start;
-  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.25);
-  border-radius: 4px;
-  background-color: white;
-`;
-const RepoName = styled.p`
-  color: ${colors.blue[1]};
-  font-weight: bold;
-`;
-const RepoSpecs = styled.div`
-  display: flex;
-  gap: 16px;
-`;
-const RepoSpecsItem = styled.div`
-  display: flex;
-  gap: 4px;
-  align-items: center;
-`;
+import * as C from "./utils-page/componentStyled";
 
 function ReposPage() {
   const { repos, searchedUser, getRepos } = useAuth();
@@ -56,28 +29,28 @@ function ReposPage() {
         }}
       >
         {repos.map((repository) => (
-          <RepoCard key={repository.id}>
-            <RepoName> {repository.full_name} </RepoName>
+          <C.RepoCard key={repository.id}>
+            <C.RepoName> {repository.full_name} </C.RepoName>
             <p> {repository.description} </p>
 
-            <RepoSpecs>
-              <RepoSpecsItem>
+            <C.RepoSpecs>
+              <C.RepoSpecsItem>
                 <VscCircleLargeFilled
                   color={repository.language ? "#F2C94C" : "#E0E0E0"}
                 />
                 <p> {repository.language ? repository.language : "none"} </p>
-              </RepoSpecsItem>
-              <RepoSpecsItem>
+              </C.RepoSpecsItem>
+              <C.RepoSpecsItem>
                 <RiStarLine />
                 <p> {repository.stargazers_count} </p>
-              </RepoSpecsItem>
+              </C.RepoSpecsItem>
 
-              <RepoSpecsItem>
+              <C.RepoSpecsItem>
                 <CgGitFork />
                 <p> {repository.forks_count} </p>
-              </RepoSpecsItem>
-            </RepoSpecs>
-          </RepoCard>
+              </C.RepoSpecsItem>
+            </C.RepoSpecs>
+          </C.RepoCard>
         ))}
       </div>
     );
