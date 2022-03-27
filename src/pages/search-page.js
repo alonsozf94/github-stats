@@ -77,7 +77,7 @@ export function SearchPage() {
           </p>
         </div>
       )}
-      {status === "error" && <p>Errorrr</p>}
+      {status === "error" && <h1>El username que ingresaste no existe!...</h1>}
       {console.log("STATUS: ", status)}
       {status === "success" && (
         <div

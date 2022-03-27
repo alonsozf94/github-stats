@@ -12,6 +12,7 @@ function FavoritesPage() {
   }
 
   const AllFavorites = () => {
+    if (!myFavorites) return <h1>Aún no tienes favoritos!...</h1>;
     return myFavorites.map((favorite) => (
       <C.CardContainer key={favorite.id}>
         <C.Image src={favorite.avatar_url} alt="avatar" />
@@ -27,12 +28,12 @@ function FavoritesPage() {
   };
 
   const ContainerPages = () => {
-    const cantPages = Math.ceil((myFavorites.length * 1) / 7.0);
-    const array = Array.from(Array(cantPages).keys());
+    // const cantPages = Math.ceil((myFavorites.length * 1) / 7.0);
+    const array = Array.from(Array(1).keys());
     return array.map((number) => (
       <C.Pages>
         <FaLessThan />
-        <C.NumberPage>{number}</C.NumberPage>
+        <C.NumberPage>{number + 1}</C.NumberPage>
         <FaGreaterThan />
       </C.Pages>
     ));
@@ -40,7 +41,7 @@ function FavoritesPage() {
 
   return (
     <C.Section>
-      <C.Title>Favorites ({myFavorites.length})</C.Title>
+      <C.Title>Favorites ({myFavorites ? myFavorites.length : 0})</C.Title>
       <ContainerPages />
       <AllFavorites />
     </C.Section>

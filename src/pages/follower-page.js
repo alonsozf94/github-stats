@@ -1,28 +1,23 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import * as C from "./componentStyled/componentStyled";
 import { FaGreaterThan } from "react-icons/fa";
 import { FaLessThan } from "react-icons/fa";
+import { useAuth } from "../context/auth-context";
 
 function FollowersPage() {
-  const [followers, setFollowers] = useState([]);
-  const data = JSON.parse(localStorage.getItem("data"));
+  const { followers, searchedUser, getFollowers } = useAuth();
 
   useEffect(() => {
-    fetch(data.urlFollowers.concat(`?per_page=7&page=${1}&tab=followers`), {
-      headers: {
-        Authorization:
-          "Basic UnViZW5TYW5kcm86Z2hwXzlJUmhaWjJWTjd6WmdMRkRqVk5jcjUxc3BUcG81MjN6Ym1XcQ==",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setFollowers(data);
-      });
-  }, []);
+    getFollowers(searchedUser.urlFollowers);
+  });
 
   const Haters = () => {
+    if (!followers) return <h1>Aún no tiene Followers!!!!</h1>;
     return followers.map((follower) => (
-      <C.CardContainer key={follower.login}>
+      <C.CardContainer
+        key={follower.login}
+        style={{ justifyContent: "flex-start", padding: "8px 12px" }}
+      >
         <C.Image src={follower.avatar_url} alt="logo" />
         <p>{follower.login}</p>
       </C.CardContainer>
@@ -34,29 +29,22 @@ function FollowersPage() {
     //   localStorage.getItem("data")
     // ).cantFollowers;
     // const cantPages = Math.ceil((cantFollowers * 1) / 7.0);
-    const array = Array.from(Array(5).keys());
+    const array = Array.from(Array(1).keys());
     return array.map((number) => (
       <C.Pages keys={number}>
         <FaLessThan />
-        <C.NumberPage>{number}</C.NumberPage>
+        <C.NumberPage>{number + 1}</C.NumberPage>
         <FaGreaterThan />
       </C.Pages>
     ));
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignContent: "center",
-        justifyContent: "center",
-        gap: "4px",
-      }}
-    >
+    <C.Section>
+      <C.Title>Favorites ({searchedUser.cantFollowers})</C.Title>
       <ContainerPages />
-      <Haters />;
-    </div>
+      <Haters />
+    </C.Section>
   );
 }
 export default FollowersPage;

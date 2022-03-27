@@ -79,7 +79,6 @@ export const Section = styled.div`
   flex-direction: column;
   align-items: center;
   max-width: 480px;
-  gap: 20px;
   margin: auto;
 `;
 

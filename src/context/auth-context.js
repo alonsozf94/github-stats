@@ -18,6 +18,9 @@ function AuthProvider({ children }) {
   const [followers, setFollowers] = useState(
     JSON.parse(localStorage.getItem("followers")) || null
   );
+  const [following, setFollowing] = useState(
+    JSON.parse(localStorage.getItem("following")) || null
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,6 +53,8 @@ function AuthProvider({ children }) {
   function handleLogout() {
     return logout().finally(() => {
       setUser(null);
+      setSearchedUser(null);
+      setStatus("");
       localStorage.setItem("data", null);
       localStorage.setItem("favorites", null);
       localStorage.setItem("status", "");
@@ -101,6 +106,19 @@ function AuthProvider({ children }) {
       .then((response) => response.json())
       .then((data) => {
         setFollowers(data);
+      });
+  }
+
+  function handleShowFollowing(url) {
+    fetch(url.concat(`?per_page=7&page=${1}&tab=followers`), {
+      headers: {
+        Authorization:
+          "Basic UnViZW5TYW5kcm86Z2hwXzlJUmhaWjJWTjd6WmdMRkRqVk5jcjUxc3BUcG81MjN6Ym1XcQ==",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setFollowing(data);
       });
   }
 
@@ -167,6 +185,7 @@ function AuthProvider({ children }) {
         searchedUser,
         myFavorites,
         followers,
+        following,
         login: handleLogin,
         signup: handleSignup,
         logout: handleLogout,
@@ -175,6 +194,7 @@ function AuthProvider({ children }) {
         favorite: HandleCreateFavorite,
         unfavorite: HandleDestroyFavorite,
         getFollowers: handleShowFollowers,
+        getFollowing: handleShowFollowing,
       }}
     >
       {children}
