@@ -55,7 +55,22 @@ export function SearchPage() {
         <button type="submit">Search</button>
       </C.Form>
 
-      {searchedUser ? (
+    {status === "idle" && <div><BsGithub style={{height:"7.5em", width:"7.5em"}}/><p style={{fontWeight: "700", fontSize: "20px", lineHeight: "25px", textAlign: "center"}}>No users...</p> </div>}
+    {status === "loading" && <div><BsGithub style={{height:"7.5em", width:"7.5em"}}/><p style={{fontWeight: "700", fontSize: "20px", lineHeight: "25px", textAlign: "center"}}>Retrieven user...</p></div>}
+    {status === "Error" && <p>{states.error}</p>}
+    {console.log('STATUS: ',status)}
+    { status=== "success" && (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "0.5rem",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <C.Avatar src={state.urlAvatar} alt="avatar" />
+          
         <div
           style={{
             display: "flex",
@@ -123,6 +138,7 @@ export function SearchPage() {
             </C.Card>
           </div>
         </div>
+      </div>
       )}
     </C.Container>
   );
