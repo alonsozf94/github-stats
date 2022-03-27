@@ -7,6 +7,7 @@ import { createUser, getUser, updateUser } from "../services/users-service";
 const AuthContext = createContext();
 
 function AuthProvider({ children }) {
+  const [status, setStatus] = useState(localStorage.getItem("status") || "");
   const [user, setUser] = useState(null);
   const [searchedUser, setSearchedUser] = useState(
     JSON.parse(localStorage.getItem("data")) || null
@@ -16,6 +17,9 @@ function AuthProvider({ children }) {
   );
   const [followers, setFollowers] = useState(
     JSON.parse(localStorage.getItem("followers")) || null
+  );
+  const [following, setFollowing] = useState(
+    JSON.parse(localStorage.getItem("following")) || null
   );
   const navigate = useNavigate();
 
@@ -49,11 +53,18 @@ function AuthProvider({ children }) {
   function handleLogout() {
     return logout().finally(() => {
       setUser(null);
+      setSearchedUser(null);
+      setStatus("");
+      localStorage.setItem("data", null);
+      localStorage.setItem("favorites", null);
+      localStorage.setItem("status", "");
+      sessionStorage.setItem("github-stats-token", null);
       navigate("/");
     });
   }
 
   function handleSearchUser(username) {
+    setStatus("loading");
     return fetch(`https://api.github.com/users/${username}`, {
       headers: {
         Authorization:
@@ -79,7 +90,10 @@ function AuthProvider({ children }) {
         };
         setSearchedUser(newData);
         localStorage.setItem("data", JSON.stringify(newData));
-      });
+        localStorage.setItem("status", "success");
+        setStatus("success");
+      })
+      .catch(() => setStatus("error"));
   }
 
   function handleShowFollowers(url) {
@@ -92,6 +106,19 @@ function AuthProvider({ children }) {
       .then((response) => response.json())
       .then((data) => {
         setFollowers(data);
+      });
+  }
+
+  function handleShowFollowing(url) {
+    fetch(url.concat(`?per_page=7&page=${1}&tab=followers`), {
+      headers: {
+        Authorization:
+          "Basic UnViZW5TYW5kcm86Z2hwXzlJUmhaWjJWTjd6WmdMRkRqVk5jcjUxc3BUcG81MjN6Ym1XcQ==",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setFollowing(data);
       });
   }
 
@@ -154,9 +181,11 @@ function AuthProvider({ children }) {
     <AuthContext.Provider
       value={{
         user,
+        status,
         searchedUser,
         myFavorites,
         followers,
+        following,
         login: handleLogin,
         signup: handleSignup,
         logout: handleLogout,
@@ -165,6 +194,7 @@ function AuthProvider({ children }) {
         favorite: HandleCreateFavorite,
         unfavorite: HandleDestroyFavorite,
         getFollowers: handleShowFollowers,
+        getFollowing: handleShowFollowing,
       }}
     >
       {children}
